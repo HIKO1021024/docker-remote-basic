@@ -1,0 +1,37 @@
+version: "2"
+services:
+  data:
+    build: ./data
+    volumes:
+     - ./workspace:/workspace
+  minio:
+   image: minio/minio
+   volumes:
+      - ./export:/export
+   ports:
+    - "9001:9000"
+   environment:
+    MINIO_ACCESS_KEY: minioACCESS
+    MINIO_SECRET_KEY: minioSECRET
+   command: server /export
+  ide:
+    build: ./ide
+    volumes_from:
+      - data
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "5001:5000"
+      - "3001:3000"
+      - "8080:8080"
+      - "2222:22"
+      
+    tty: true
+    command: bash -c "cd /workspace/comfirmation-api&&
+     sudo npm install &&
+     node_modules/.bin/serverless plugin install -n serverless-offline &&
+     cd /workspace/order-api&&
+     sudo npm install &&
+     node_modules/.bin/serverless plugin install -n serverless-offline &&
+     cd /workspace &&
+     /bin/bash"

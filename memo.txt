@@ -1,0 +1,14 @@
+sshでアクセスするには
+1 sshアクセス用のキーを生成する
+2 lamdba\ideにid_rsa.pubを配置する（これとついになる秘密鍵をvscodeが使用するキーとして登録しておけばsshリモート開発機能を使える）
+
+
+docker-compose  build
+docker-compose up -d
+
+docker-compose build --no-cache
+docker-compose up -d
+
+
+#使用してないオブジェクトの削除
+docker system prune
